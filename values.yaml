@@ -1,0 +1,89 @@
+# 默认参数，可以通过zadig的环境中指定替换
+
+image:
+  repository: nginx
+  pullPolicy: Always
+  tag: "1.21.6"
+  command: []
+  args: []
+  env: []
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+serviceName: ""
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+  # hosts:
+  #   - host: xxxx.xiaopeng.link
+  #     paths:
+  #       - path: /
+  #         backend:
+  #           service:
+  #             name: openkruise
+  #             port:
+  #               name: http
+  #         pathType: ImplementationSpecific
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+livenessProbe: {}
+
+readinessProbe: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+lifecycle: {}
+
+strategy: {}
+
+podManagementPolicy: Parallel
+updateStrategy:
+  rollingUpdate:
+    maxUnavailable: 10%
+    minReadySeconds: 0
+    partition: 0
+    podUpdatePolicy: InPlaceIfPossible
+    inPlaceUpdateStrategy:
+      gracePeriodSeconds: 120
+  type: RollingUpdate
+
+volumeMounts:
+  - mountPath: /etc/localtime
+    name: tz-config
+
+volumes:
+  - hostPath:
+      path: /usr/share/zoneinfo/Asia/Shanghai
+    name: tz-config
