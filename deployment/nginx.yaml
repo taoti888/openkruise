@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basic-nginx
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - image: bigdata-sre-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/bigdata-sre/nginx:1.21.6
+        imagePullPolicy: IfNotPresent
+        name: basic-nginx
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 200m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        volumeMounts:
+        - mountPath: /etc/localtime
+          name: tz-config
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: default-registry-secret
+      nodeSelector:
+        kubernetes.io/os: linux
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      serviceAccount: basic-nginx
+      serviceAccountName: basic-nginx
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /usr/share/zoneinfo/Asia/Shanghai
+          type: ""
+        name: tz-config
+
